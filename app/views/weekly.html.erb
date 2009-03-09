@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title><%= @hello %></title>
+  <link rel="stylesheet" href="stylesheets/blueprint/screen.css" type="text/css" media="screen, projection">
+  <link rel="stylesheet" href="stylesheets/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+  <style type="text/css">
+    .mhat-title-text       { font-size: 2.00em; font-weight: bold;  color: #555; }
+    .mhat-title-text-desc  { font-size: 0.90em; font-style: italic; color: #999; }
+    .mhat-title-text-super { font-size: 0.50em; vertical-align: 0.70em; }
+    
+    .mhat-header {
+      font-size: 2.00em;
+      font-weight: bold;
+      text-align: right;
+      border-bottom: 1px dotted #555;
+    }
+    
+    .mhat-header-2 {
+      color: #aaa;
+      height: 20px;
+      font-size: 1.50em;
+      font-weight: bold;
+      text-align: right;
+    }
+    
+    .mhat-cell-right { font-size: 1.75em; text-align: right; border-bottom: 1px dotted #777; }
+    .mhat-cell-left  { font-size: 1.75em; text-align: left;  border-bottom: 1px dotted #777; }
+    .mhat-cell-hello { font-size: 2.50em; text-align: right; font-weight: bold; border: 0px; }
+    
+    .mhat-target        { text-align: right; font-weight: bold; }
+    .mhat-target-name   { font-size: 1.50em; height: 15px; }
+    .mhat-target-word   { font-size: 1.00em; height: 18px; }
+    .mhat-target-number { font-size: 3.00em; height: 40px; }
+    
+    
+    .mhat-divider-0 { border-bottom: 1px dotted #777; }
+    .mhat-divider-1 { border-bottom: 1px dotted #555; }
+    .mhat-divider-2 { border-bottom: 3px dotted #333; }
+    
+    .mhat-color-0 { color: #aaa; }
+    .mhat-color-1 { color: #888; }
+    .mhat-color-2 { color: #666; }
+    .mhat-color-3 { color: #444; }
+    .mhat-color-4 { color: #222; }
+    
+    
+  </style>
+</head>
+<body>
+  <br/>
+  <div class="container">
+    
+    <div class="span-24">
+      
+      <!-- header and dates go here -->
+      <div class="span-24 mhat-title-text">
+        <span style="float:right">
+          March 
+          08<span class="mhat-title-text-super">th</span>
+          to 
+          14<span class="mhat-title-text-super">th</span>
+        </span>
+        Weekly Financial Report
+      </div>
+      <hr class="space"/>
+      
+      
+      
+      <!-- targets goes here -->
+      <div class="span-24 last mhat-title-text mhat-divider-2">
+        Targets <span class="mhat-title-text-desc">Month to Date</span>
+      </div>
+      
+      <!-- math: each bar is 4 of 24, so 6 bars per line -->
+      <div class="span-20 mhat-target">&nbsp;</div>
+      
+      <!-- target name, target, spent, remaining: iterate -->
+      <% @targets.each_with_index do |target,idx| %>
+      <div class="span-4 mhat-target <%= idx == @targets.size-1 ? 'last' : '' %>">
+        <div class="mhat-target-name   mhat-color-0"><%= target.tag %></div>
+        <div class="mhat-target-number mhat-color-2"><%= target.monthly_limit.round %></div>
+        <div class="mhat-target-word   mhat-color-1">target</div>
+        <div class="mhat-target-number mhat-color-3"><%= (target.monthly_limit-target.amount_remaining).round %></div>
+        <div class="mhat-target-word   mhat-color-1 mhat-divider-0">spent</div>
+        <div class="mhat-target-number mhat-color-4"><%= target.amount_remaining.round %></div>
+        <div class="mhat-target-word   mhat-color-1">remaining</div>
+      </div>
+      <% end %>
+      
+      <!-- <div class="span-4 mhat-target last">
+        <div class="mhat-target-name   mhat-color-0">pants</div>
+        <div class="mhat-target-number mhat-color-2">450</div>
+        <div class="mhat-target-word   mhat-color-1">target</div>
+        <div class="mhat-target-number mhat-color-3">550</div>
+        <div class="mhat-target-word   mhat-color-1 mhat-divider-0">spent</div>
+        <div class="mhat-target-number mhat-color-4" style="color:#a00">-100</div>
+        <div class="mhat-target-word   mhat-color-1">remaining</div>
+      </div> -->
+      
+      
+      
+      
+      
+      <!-- cash flow go here -->
+      <hr class="space"/>
+      <hr class="space"/>
+      <div class="span-24 last mhat-title-text mhat-divider-2">Cash Flow</div>
+      <div class="span-6 mhat-header-2">&nbsp;</div>
+      <% @weeks.each do |sdate,edate| %>
+        <% if @today.day > sdate.day && @today.day < edate.day %>
+        <div class="span-3 mhat-header-2 mhat-color-2"><%= sdate.day() %> to <%= edate.day() %></div>
+        <% else %>
+        <div class="span-3 mhat-header-2 mhat-color-1"><%= sdate.day() %> to <%= edate.day() %></div>
+        <% end %>
+      <% end %>
+      <div class="span-3 mhat-header-2 mhat-color-2 last">Month</div>
+      
+      <!-- cash flow tags week,month: iterate -->
+      <% @tags.each do |tag| %>
+      <div class="span-6  mhat-cell-left  mhat-color-3"><%= tag.name %></div>
+        <% tag.each_week do |week,total| %>
+          <% if @today.day > week[0].day && @today.day < week[1].day %>
+          <div class="span-3  mhat-cell-right mhat-color-2"><%= total.round %></div>
+          <% else %>
+          <div class="span-3  mhat-cell-right mhat-color-1"><%= total.round %></div>
+          <% end %>
+        <% end %>
+      <div class="span-3  mhat-cell-right mhat-color-3 last"><%= tag.total.round %></div>
+      <% end %>
+      
+      <!-- cash flow totals week,month -->
+      <div class="span-6 mhat-cell-hello mhat-color-4">&nbsp;</div>
+      <div class="span-3 mhat-cell-hello mhat-color-2">X</div>
+      <div class="span-3 mhat-cell-hello mhat-color-4">X</div>
+      <div class="span-3 mhat-cell-hello mhat-color-2">0</div>
+      <div class="span-3 mhat-cell-hello mhat-color-2">0</div>
+      <div class="span-3 mhat-cell-hello mhat-color-2">0</div>
+      <div class="span-3 mhat-cell-hello mhat-color-4 last">Y</div>
+      
+    </div>
+  </div>
+</body>
+</html>
