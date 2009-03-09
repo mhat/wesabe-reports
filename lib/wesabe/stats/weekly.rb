@@ -8,7 +8,7 @@ module Wesabe::Stats
         tag_wk_total = 0.0
         tag_wk_count = 0
         @txactions.each do |txaction|
-          if txaction.date > week[0] && txaction.date < week[1]
+          if txaction.date >= week[0] && txaction.date < week[1]
             tag_wk_total += txaction.amount
             tag_wk_count += 1
           end
