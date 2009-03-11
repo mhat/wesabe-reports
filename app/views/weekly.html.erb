@@ -59,16 +59,20 @@
       <!-- header and dates go here -->
       <div class="span-24 mhat-title-text">
         <span style="float:right">
-          March 
-          08<span class="mhat-title-text-super">th</span>
-          to 
-          14<span class="mhat-title-text-super">th</span>
+          <%= @weeks.first[0].strftime("%B") %>
+          
+          <% if @week.size > 0 %>
+            <%= @week[0].day %><span class="mhat-title-text-super"><%=  Wesabe::Stats::Util.ordinal_suffix(@week[0].day) %></span>
+            to 
+            <%= @week[1].day %><span class="mhat-title-text-super"><%=  Wesabe::Stats::Util.ordinal_suffix(@week[1].day) %></span>
+          <% else %>
+            <%= @weeks.first[0].day %><span class="mhat-title-text-super"><%=  Wesabe::Stats::Util.ordinal_suffix(@weeks.first[0].day) %></span>
+            to <%= @weeks.last[1].day %><span class="mhat-title-text-super"><%=  Wesabe::Stats::Util.ordinal_suffix(@weeks.last[1].day) %></span>
+          <% end %>
         </span>
         Weekly Financial Report
       </div>
       <hr class="space"/>
-      
-      
       
       <!-- targets goes here -->
       <div class="span-24 last mhat-title-text mhat-divider-2">
@@ -90,20 +94,6 @@
         <div class="mhat-target-word   mhat-color-1">remaining</div>
       </div>
       <% end %>
-      
-      <!-- <div class="span-4 mhat-target last">
-        <div class="mhat-target-name   mhat-color-0">pants</div>
-        <div class="mhat-target-number mhat-color-2">450</div>
-        <div class="mhat-target-word   mhat-color-1">target</div>
-        <div class="mhat-target-number mhat-color-3">550</div>
-        <div class="mhat-target-word   mhat-color-1 mhat-divider-0">spent</div>
-        <div class="mhat-target-number mhat-color-4" style="color:#a00">-100</div>
-        <div class="mhat-target-word   mhat-color-1">remaining</div>
-      </div> -->
-      
-      
-      
-      
       
       <!-- cash flow go here -->
       <hr class="space"/>

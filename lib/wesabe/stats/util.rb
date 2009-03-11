@@ -1,6 +1,16 @@
 module Wesabe::Stats::Util
   extend self
   
+  def ordinal_suffix (number)
+    return case number
+      when 0: ''
+      when 1: 'st'
+      when 2: 'nd'
+      when 3: 'rd'
+      else    'th'
+    end
+  end
+  
   def calculate_weeks_in_month_for_date ( initial=Time.now )
     weeks = []
     fday  = Chronic.parse('first day this month', :now => initial)
